@@ -1,0 +1,51 @@
+basePath: /
+definitions:
+  entity.Response:
+    properties:
+      message:
+        type: string
+      service:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a busca cep server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Busca CEP Server
+  version: "1.0"
+paths:
+  /cep/{cep}:
+    get:
+      consumes:
+      - application/json
+      description: Get a cep
+      parameters:
+      - description: cep
+        in: path
+        name: cep
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Response'
+        "400":
+          description: Bad Request
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Get a cep
+      tags:
+      - cep
+swagger: "2.0"
