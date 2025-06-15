@@ -5,6 +5,7 @@ import (
 	"desafio-multithreading/pkg"
 	"desafio-multithreading/usecase/buscacep"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -18,19 +19,20 @@ import (
 // @Produce      json
 // @Param        cep   path      string  true  "cep"
 // @Success      200  {object}  entity.Response
-// @Failure      400  {object}  error
+// @Failure      400  {object}  entity.Response
 // @Failure      404  {object}  error
-// @Failure      500  {object}  error
+// @Failure      500  {object}  entity.Response
 // @Router       /cep/{cep} [get]
 func BuscaCepHandler(w http.ResponseWriter, r *http.Request) {
 	cepParam := chi.URLParam(r, "cep")
-	if cepParam == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
 
 	if !pkg.ValidateCepFormat(cepParam) {
 		w.WriteHeader(http.StatusBadRequest)
+		response := &entity.Response{
+			Message: fmt.Sprintf("O cep informado %s está em um formato inválido.", cepParam),
+			Service: "internal",
+		}
+		json.NewEncoder(w).Encode(response)
 		return
 	}
 
